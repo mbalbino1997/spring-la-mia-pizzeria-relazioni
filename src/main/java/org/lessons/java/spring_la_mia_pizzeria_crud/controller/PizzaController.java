@@ -1,7 +1,9 @@
 package org.lessons.java.spring_la_mia_pizzeria_crud.controller;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.lessons.java.spring_la_mia_pizzeria_crud.model.Offer;
 import org.lessons.java.spring_la_mia_pizzeria_crud.model.Pizza;
 import org.lessons.java.spring_la_mia_pizzeria_crud.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 
 
 
@@ -43,6 +43,25 @@ public String show(@PathVariable Integer id, Model model) {
     if (pizza == null) {
         return "redirect:/pizze"; // Se non trova la pizza, torna alla lista
     }
+     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    pizza.getOffers().forEach(offer -> {
+        // Controlla che la data di inizio non sia nulla
+        if (offer.getStartDate() != null) {
+            String startDateFormatted = offer.getStartDate().format(formatter);
+            offer.setStartDateFormatted(startDateFormatted); // Imposta la data formattata
+        } else {
+            offer.setStartDateFormatted(""); // Imposta una stringa vuota se la data è nulla
+        }
+        
+        // Controlla che la data di fine non sia nulla
+        if (offer.getEndDate() != null) {
+            String endDateFormatted = offer.getEndDate().format(formatter);
+            offer.setEndDateFormatted(endDateFormatted); // Imposta la data formattata
+        } else {
+            offer.setEndDateFormatted(""); // Imposta una stringa vuota se la data è nulla
+        }
+    });
     model.addAttribute("pizza", pizza);
     return "pizze/show"; // Mostra la vista del dettaglio
     }
@@ -96,6 +115,15 @@ if (pizza == null) {
     public String delete(@PathVariable Integer id) {
         repository.deleteById(id);
         return "redirect:/pizze";
+    }
+    
+
+    @GetMapping("{id}/offers")
+    public String offer(@PathVariable Integer id,Model model) {
+        Offer offer = new Offer();
+        offer.setPizza(repository.findById(id).get());
+        model.addAttribute("offer", offer);
+        return "offers/create";
     }
     
     

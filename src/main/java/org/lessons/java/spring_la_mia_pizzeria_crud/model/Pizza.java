@@ -1,12 +1,15 @@
 package org.lessons.java.spring_la_mia_pizzeria_crud.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -30,6 +33,17 @@ public class Pizza {
     @Column(nullable = false, precision = 10, scale = 2)
     @Min(value=0,message="Il prezzo non può essere minore di 0")
     private BigDecimal price;
+    
+    @OneToMany(mappedBy = "pizza",cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Offer> offers;
+
+    public List<Offer> getOffers() {
+        return offers;
+    }
+    public void setOffers(List<Offer> offers) {
+        this.offers=offers;
+    }
+    
     public Integer getId() {
         return id;
     }
@@ -65,6 +79,10 @@ public class Pizza {
     public String toString() {
         return String.format("nome: %s, descrizione: %s, prezzo: %.2f€ ", name, description, price);
     }
+
+
+
+    
 
     
 }
