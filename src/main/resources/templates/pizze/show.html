@@ -113,9 +113,13 @@
                         <p class="offer-title" th:text="${offer.title}"></p>
                         <p class="offer-price" th:text="${#numbers.formatDecimal(offer.price, 1, 2)} + '€'"></p>
                         <p class="offer-dates" th:text="'Data di inizio: ' + ${offer.startDateFormatted} + ' | Data di fine: ' + ${offer.endDateFormatted}"></p>
-                        <form method="POST" th:action="@{'/offerte/delete/' + ${offer.id}}">
-                            <button type="submit" class="btn btn-danger">elimina</button>
-                        </form>
+                        <div class="d-flex justify-content-end gap-3">
+                            <a th:href="@{/offerte/edit/{id}(id=${offer.id})}" class="btn btn-warning">Modifica</a>
+                            <form method="POST" th:action="@{'/offerte/delete/' + ${offer.id}}">
+                                <button type="submit" class="btn btn-danger">elimina</button>
+                            </form>
+
+                        </div>
                     </div>
                 </div>
             </div>
