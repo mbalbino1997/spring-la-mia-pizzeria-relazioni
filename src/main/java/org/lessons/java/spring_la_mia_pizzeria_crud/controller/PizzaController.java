@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.lessons.java.spring_la_mia_pizzeria_crud.model.Offer;
 import org.lessons.java.spring_la_mia_pizzeria_crud.model.Pizza;
+import org.lessons.java.spring_la_mia_pizzeria_crud.repository.IngredientRepository;
 import org.lessons.java.spring_la_mia_pizzeria_crud.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,18 +22,21 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
-
-
 @Controller
 @RequestMapping("/pizze")
 public class PizzaController {
+
+    private final IngredientRepository ingredientRepository;
     @Autowired
     private PizzaRepository repository;
+
+    PizzaController(IngredientRepository ingredientRepository) {
+        this.ingredientRepository = ingredientRepository;
+    }
 
     @GetMapping
     public String index(Model model) {
         List<Pizza> pizze = repository.findAll();
-        System.out.println("Pizze trovate: " + pizze);
         model.addAttribute("pizze", pizze);
         return "pizze/index";
     }
@@ -94,9 +98,10 @@ public String show(@PathVariable Integer id, Model model) {
     public String edit(@PathVariable Integer id,Model model) {
         Pizza pizza = repository.findById(id).orElse(null);
         model.addAttribute("pizza", pizza);
-if (pizza == null) {
-    return "redirect:/pizze";
-}
+        model.addAttribute("ingredients", ingredientRepository.findAll());
+    if (pizza == null) {
+        return "redirect:/pizze";
+    }
         return "pizze/edit";
     }
 
