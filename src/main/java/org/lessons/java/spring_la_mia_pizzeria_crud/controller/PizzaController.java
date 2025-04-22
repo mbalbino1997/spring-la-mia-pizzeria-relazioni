@@ -67,6 +67,7 @@ public String show(@PathVariable Integer id, Model model) {
         }
     });
     model.addAttribute("pizza", pizza);
+    model.addAttribute("ingredients", ingredientRepository.findAll());
     return "pizze/show"; // Mostra la vista del dettaglio
     }
     @GetMapping("/searchByName")
@@ -79,6 +80,7 @@ public String show(@PathVariable Integer id, Model model) {
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("pizza",new Pizza());
+        model.addAttribute("ingredients", ingredientRepository.findAll());
         
         return "pizze/create";
     }
@@ -99,17 +101,19 @@ public String show(@PathVariable Integer id, Model model) {
         Pizza pizza = repository.findById(id).orElse(null);
         model.addAttribute("pizza", pizza);
         model.addAttribute("ingredients", ingredientRepository.findAll());
-    if (pizza == null) {
-        return "redirect:/pizze";
-    }
+        model.addAttribute("offers",pizza.getOffers());
         return "pizze/edit";
     }
 
     @PostMapping("/edit/{id}")
-    public String update( @Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingresult, Model model) {
+    public String update(@PathVariable Integer id, @Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingresult, Model model) {
         if(bindingresult.hasErrors()) {
+            bindingresult.getAllErrors().forEach(error -> System.out.println(error));
+            model.addAttribute("ingredients", ingredientRepository.findAll());
+            model.addAttribute("offers", formPizza.getOffers());
             return "pizze/edit";
         }
+        formPizza.setOffers(repository.findById(id).orElse(null).getOffers());
         repository.save(formPizza);
         
         return "redirect:/pizze";

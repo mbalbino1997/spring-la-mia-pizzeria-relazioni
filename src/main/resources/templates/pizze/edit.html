@@ -14,7 +14,9 @@
         <div class="card shadow-lg p-4 w-50">
             <h1 class="text-center text-primary mb-4">Aggiornare la pizza <span th:text="${pizza?.name ?: 'Senza nome'}"></span></h1>
             <form id="pizza-form" th:object="${pizza}" th:action="@{/pizze/edit/{id}(id=${pizza.id})}" method="post">
-                
+                <th:block th:each="offer : ${pizza.offers}">
+                    <input type="hidden" name="offers" th:value="${offer.id}" />
+                </th:block>
                 <div class="row mb-3">
                     <div class="col-md-8">
                         <label class="form-label" for="name">Nome della pizza</label>
