@@ -38,8 +38,9 @@ public class PizzaService {
         });
     }
 
-    public void save(Pizza pizza) {
+    public Pizza save(Pizza pizza) {
         pizzaRepository.save(pizza);
+        return pizza;
     }
 
     public void deleteById(Integer id) {

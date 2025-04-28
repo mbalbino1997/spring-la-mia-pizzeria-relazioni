@@ -3,6 +3,8 @@ package org.lessons.java.spring_la_mia_pizzeria_crud.model;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,6 +40,7 @@ public class Pizza {
     private BigDecimal price;
     
     @OneToMany(mappedBy = "pizza",cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonManagedReference
     private List<Offer> offers;
 
     @ManyToMany()
