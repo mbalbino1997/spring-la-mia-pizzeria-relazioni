@@ -13,6 +13,13 @@
                 <li><a th:href="@{/pizze}" href="/pizze">Tutte le pizze</a></li>
                 <li><a th:href="@{/pizze/create}" href="/pizze/create">Aggiungi una pizza</a></li>
                 <li><a th:href="@{/ingredienti}" href="/ingredienti">Ingredienti</a></li>
+                <li><a th:href="@{/logout}" href="/logout">Esci</a></li>
+            </ul>
+        </nav>
+        <nav sec:authorize="isAuthenticated()">
+            <ul>
+                <li>Utente: <span sec:authentication="name"></span></li>
+                <li>Ruoli: <span sec:authentication="principal.authorities"></span></li>
             </ul>
         </nav>
     </header>

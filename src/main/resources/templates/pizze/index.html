@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,9 +41,9 @@
                     </td>
                     <td>
                         <a th:href="@{/pizze/{id}(id=${pizza.id})}" class="btn btn-info btn-sm">Dettagli</a>
-                        <a th:href="@{/pizze/edit/{id}(id=${pizza.id})}" class="btn btn-warning btn-sm">Modifica</a>
+                        <a sec:authorize="hasRole('ADMIN')" th:href="@{/pizze/edit/{id}(id=${pizza.id})}" class="btn btn-warning btn-sm">Modifica</a>
                         <!-- Pulsante per aprire la modale -->
-                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                        <button sec:authorize="hasRole('ADMIN')" type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"
                                 th:attr="data-pizza-id=${pizza.id}, data-pizza-name=${pizza.name}">
                             Elimina
                         </button>
